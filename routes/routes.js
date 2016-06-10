@@ -2,10 +2,17 @@
  *MODULES REQUIREMENT START HERE BY RT-TEAM
  **********************************************************************************/
 
+var APIAction = require('../actions/api-actions.js');
+
+var Promise = require('bluebird');
+
+
 var ApiRoutes = function (app) {
 
     this.app = app;
     this.conf = app.conf;
+    this.apiActionInstance = new APIAction(app);
+    this.apiAction = Promise.promisifyAll(this.apiActionInstance);
 };
 module.exports = ApiRoutes;
 
@@ -27,6 +34,30 @@ ApiRoutes.prototype.init = function () {
         path:'/',
         handler: function (request, reply) {
                 return reply({'test':'Ok'});
+        }
+    });
+
+
+
+    app.server.route({
+        method: 'GET',
+        path:'/geoServices',
+        handler: function (request, reply) {
+
+            self.apiAction.getAddress(request)
+                .then(function(result){
+                    console.log("Address RESULT*********",result)
+                    reply(result)
+                })
+                .error(function(e){
+                    console.log("ERROR HANDLER " + e);
+                    reply(e.message)
+                })
+                .catch(function(e){
+                    console.log("CATCH in " + e);
+                    reply(e.message)
+                })
+
         }
     });
 

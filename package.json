@@ -25,9 +25,10 @@
     "tswagger-codegen": "git+https://tpm:t676@bitbucket.org/tlib/tswagger-codegen.git",
     "underscore": "^1.8.3",
     "tlogger": "git+https://tpm:t676@bitbucket.org/tode/tlogger.git",
-    "tdatadriver": "git+https://todeuser:todewelcome@bitbucket.org/todeuser/tdatadriver.git#master"
+    "tdatadriver": "git+https://todeuser:todewelcome@bitbucket.org/todeuser/tdatadriver.git#master",
+    "geocoder": "~0.2.2",
+    "request": "~2.72.0",
+    "where": "~0.1.2"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
-

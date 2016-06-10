@@ -63,23 +63,18 @@ app.tlogger = tlogger.init();
 /*******************************************************************************************
  * Database Initialization
  ******************************************************************************************/
-var mongo = require('tdatadriver');
-var dbconn = {};
-var objectid = null;
+var mongoDb = require('tdatadriver').mongo;
 var Promise = require('bluebird');
 
 try {
-  dbconn = new mongo(conf['database']);
-  objectid = dbconn.ObjectId();
-  app.db = dbconn;
-  app.db = Promise.promisifyAll(app.db);
-
-  app.dbconn = dbconn;
+  mongoDb.connect(conf.database);
+  app['mongoDb'] = mongoDb;
+  app.mongoDb = Promise.promisifyAll(app.mongoDb);
 }
-
 catch (err) {
   console.log('Error @ Database Connection Initialization : ' + err);
 }
+
 
 /*******************************************************************************************
  * Global Exception Handler
