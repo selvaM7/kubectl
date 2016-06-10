@@ -46,7 +46,7 @@ ApiRoutes.prototype.init = function () {
 
             self.apiAction.getAddress(request)
                 .then(function(result){
-                    console.log("Address RESULT*********",result)
+                    console.log("*********ADDRESS RESULT*********",result)
                     reply(result)
                 })
                 .error(function(e){

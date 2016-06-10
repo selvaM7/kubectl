@@ -38,11 +38,6 @@ APIAction.prototype.getAddress = function (reqObj) {
     } else {
         input = reqObj
     }
-    input = {
-        serviceName: 'google',
-        latitude: '40.714224',
-        longitude: '-73.961452'
-    }
 
     return new Promise(function (resolve, reject) {
         if (input) {
