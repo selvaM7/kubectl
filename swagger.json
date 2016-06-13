@@ -5,6 +5,7 @@
         "description": "Geo Service Handler",
         "version": "0.1.0"
     },
+    "gitRepoName" : "geoservices-client",
     "host": "api.tmatics.com",
     "schemes": [
         "https"
@@ -26,6 +27,55 @@
                 "responses": {
                     "200": {
                         "description": "An array of products",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/sample"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/getLocationDetails": {
+            "get": {
+                "summary": "get Details for latitude and longitude",
+                "description": "get address for latitude and longitude",
+                "parameters": [
+                    {
+                        "name": "latitude",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "type": "string",
+                        "format": "double"
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "type": "string",
+                        "format": "double"
+                    },
+                    {
+                        "name": "serviceName",
+                        "in": "body",
+                        "description": "",
+                        "required": false,
+                        "type": "string",
+                        "format": "double"
+                    }
+                ],
+                "tags": [
+                    ""
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An JSON object returns the array of Trip Management.",
                         "schema": {
                             "type": "array",
                             "items": {
