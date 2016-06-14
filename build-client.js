@@ -20,7 +20,7 @@ var file = __dirname+'/swagger.json';
 var swagger = JSON.parse(fs.readFileSync(file, 'UTF-8'));
 
 
-var className = 'User';
+var className = 'Geoservices';
 var repoName = swaggerJson.gitRepoName;
 var repoTeamName = 'serviceclients';
 
