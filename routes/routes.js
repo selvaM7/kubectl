@@ -41,7 +41,7 @@ ApiRoutes.prototype.init = function () {
 
     app.server.route({
         method: 'GET',
-        path:'/getLocationDetails',
+        path:'/v1/getLocationDetails',
         handler: function (request, reply) {
 
             self.apiAction.getAddress(request)
