@@ -15,16 +15,16 @@ require( "console-stamp" )( console, { metadata: function () {
 
 var swaggerJson = require('./swagger.json');
 var fs = require('fs');
-var CodeGen = require('swagger-js-codegen').CodeGen;
+var CodeGen = require('tswagger-codegen').CodeGen;
 var file = __dirname+'/swagger.json';
 var swagger = JSON.parse(fs.readFileSync(file, 'UTF-8'));
+var Mustache = require('mustache');
 
 
-var className = 'Geoservices';
+var className = swaggerJson.className;
 var repoName = swaggerJson.gitRepoName;
-var repoTeamName = 'serviceclients';
-
-
+var repoTeamName = 'client_microservice';
+var destFolder = null;
 var clinetLibPath ='../'+repoName;
 
 
@@ -39,27 +39,21 @@ client.getRepoDetails({owner:repoTeamName, repo_slug : repoName}, function(res){
 
             cloneProject(null,function(err,data){
                 var isPkgJsonExist = checkPkgJsonExist();
-
                 if(isPkgJsonExist){
                     console.log("PACKAGE.JSON EXIST");
-
                     removeOldFile(null,function(err,data){
-
                         buildSdk(null,function(err,data){
+                            fillJson(null,function(err,output){
+                                generateNewSdk(output, function (err, res) {
+                                    fillIndex(null,function(err,res) {
+                                        setTimeout(function () {
+                                            pushToGit(res, function (err, res) {
+                                                console.error("FINISHED");
+                                            })
+                                        },4000)
+                                    })
 
-                            fillJson(null,function(err,res){
-
-                                generateNewSdk(res,function(err,res){
-
-                                    /* pushTogit(res,function(err,res) {
-
-                                     console.log("PUSHED SUCCESSFULLY")
-                                     })
-
-                                     */
                                 })
-
-
                             })
                         })
 
@@ -67,16 +61,19 @@ client.getRepoDetails({owner:repoTeamName, repo_slug : repoName}, function(res){
                 }
                 else {
                     console.error("PACKAGE.JSON IS NOT EXIST");
-
                     buildSdk(001,function(err,data){
-
                         fillJson(null,function(err,res){
-
-                            generateNewSdk(res,function(err,res){
-
-
-                            })
-
+                            if(!err) {
+                                generateNewSdk(res, function (err, res) {
+                                    fillIndex(null,function(err,res) {
+                                        setTimeout(function () {
+                                            pushToGit(res, function (err, res) {
+                                                console.error("FINISHED");
+                                            })
+                                        }, 6000)
+                                    })
+                                })
+                            }
                         })
 
                     })
@@ -157,22 +154,29 @@ function removeOldFile(input,cbk) {
 }
 
 function generateNewSdk(input,cbk) {
-
     eval('var obj='+input);
-    var destFolder = obj.sourceFile;
+    console.log(obj.author.rootFolder)
+    destFolder = obj.author.rootFolder;
     var nodejsSourceCode = CodeGen.getNodeCode({
         className: className,
         swagger: swagger
     });
-    var filepath = "../"+repoName+'/'+destFolder+'/'+className+"_service.js";
-    var log_file = fs.createWriteStream(filepath, { flags: 'a' });
-    log_file.write(nodejsSourceCode);
-    cbk(null,null)
+    var filepath = "../"+repoName+'/'+destFolder+'/'+className.toLowerCase()+".js";
+
+    fs.writeFile(filepath, nodejsSourceCode, function(err) {
+        if(!err){
+        }
+        else{
+            console.log("FILE WRITTING ERROR")
+        }
+
+        cbk(null,null)
+    });
+
 }
 
 
 function pushTogit(input,cbk) {
-    console.log(repoName,'reposdfsdfsdfsd');
 
     var shellCmd = 'cd .. && cd '+repoName+' && git add --all && git status';
     exec(shellCmd ,
@@ -192,7 +196,6 @@ function pushTogit(input,cbk) {
 }
 
 function checkPkgJsonExist(){
-
     return fileExists(clinetLibPath +'/package.json')
 }
 
@@ -202,13 +205,12 @@ function buildSdk(input,cbk){
     if(input == 001)
     {
         console.log('SDK GOING TO BUILD FOR NEW REPOSITORY');
-        var shellCmd = 'cd .. && cd '+repoName+'&& slush sdk ';
+        var shellCmd = 'cd .. && cd '+repoName+'&& slush microservice-client-generator ';
     }
     else{
         console.log('SDK GOING TO BUILD FOR OLD REPOSITORY');
-        var shellCmd = 'cd .. && cd '+repoName+'&& slush sdk ';
+        var shellCmd = 'cd .. && cd '+repoName+'&& slush microservice-client-generator ';
     }
-
 
     exec(shellCmd ,
         function (error, stdout, stderr) {
@@ -225,50 +227,116 @@ function fillJson(input,cbk){
     var generatedPackageJson = require('./package.json');
 
     var view = {
-        name: generatedPackageJson.name,
-        version: generatedPackageJson.version
+        name: repoName ? repoName : "Sorry",
+        version: generatedPackageJson.version ? generatedPackageJson.version  : "",
+        desc : generatedPackageJson.description ? generatedPackageJson.description : "",
+        authorName : generatedPackageJson.author.name ? generatedPackageJson.author.name : "",
+        authorEmail : generatedPackageJson.author.email ? generatedPackageJson.author.email : ""
+
+
     };
-    var Mustache = require('mustache');
 
-    var test = require("../"+repoName+"/mustache-template.json");
-    var output = Mustache.render(test, view);
+    //var test = require("../"+repoName+"/mustache-template.json");
 
+    var pkgTemplatePath = "../"+repoName+"/package-temp.mustache";
+    var generatedFile = fs.readFileSync(pkgTemplatePath, 'utf-8');
 
-
-
-
-
+    var output = Mustache.render(generatedFile, view ,generatedFile);
 
     var filepath = "../"+repoName+"/package.json";
-    console.log(filepath);
 
     fs.truncate(filepath, 0, function(){
-            console.log('JSON removed')}
-    );
+        console.log('JSON removed')
 
-    var log_file = fs.createWriteStream(filepath, { flags: 'a' });
-    log_file.write(output);
-
-    cbk(null,output)
-
-
-
-    var shellCmd = "cd .. && cd "+repoName+" && rm -f mustache-template.json ";
-    exec(shellCmd ,
-        function (error, stdout, stderr) {
-            console.log('REMOVE FILES OUT: ' + stdout);
-
-            if (stdout) {
-                var destPath = stdout
+        fs.writeFile(filepath, output, function(err) {
+            if(!err){
             }
-            console.log('REMOVE FILES STD ERR: ' + stderr);
-            if (error !== null) {
-                console.error('REMOVE FILES ERROR: ' + error);
+            else{
+                console.log("FILE WRITTING ERROR")
             }
 
+            var shellCmd = "cd .. && cd "+repoName+" && rm -f package-temp.mustache ";
+            exec(shellCmd ,
+                function (error, stdout, stderr) {
+                    console.log('REMOVE FILES OUT: ' + stdout);
 
+                    if (stdout) {
+                        var destPath = stdout
+                    }
+                    console.log('REMOVE FILES STD ERR: ' + stderr);
+                    if (error !== null) {
+                        console.error('REMOVE FILES ERROR: ' + error);
+                    }
+                });
+
+            cbk(null,output)
+        });
+    });
+
+
+
+
+
+
+}
+
+
+function fillIndex(input,cbk){
+
+    var pkgTemplatePath = "../"+repoName+"/index-template.mustache";
+    var generatedFile = fs.readFileSync(pkgTemplatePath, 'utf-8');
+    var view = {
+        className : className.toLowerCase()+".js"
+    };
+
+    var output = Mustache.render(generatedFile, view ,generatedFile);
+    var filepath = "../"+repoName+"/"+destFolder+"/index.js";
+    console.log(filepath);
+    fs.truncate(filepath, 0, function(){
+        console.log('JSON removed')
+
+        fs.writeFile(filepath, output, function(err) {
+            if(!err){
+            }
+            else{
+                console.log(err);
+                console.log("FILE WRITTING ERROR")
+            }
+
+
+            var shellCmd = "cd .. && cd "+repoName+" && rm -f index-template.mustache";
+            exec(shellCmd ,
+                function (error, stdout, stderr) {
+                    console.log('REMOVE FILES OUT: ' + stdout);
+
+                    if (stdout) {
+                        var destPath = stdout
+                    }
+                    console.log('REMOVE FILES STD ERR: ' + stderr);
+                    if (error !== null) {
+                        console.error('REMOVE FILES ERROR: ' + error);
+                    }
+                });
+
+            cbk(null,output);
         });
 
+    });
+
+}
 
 
+function pushToGit(input,cbk){
+
+    var shellCmd = 'cd .. && cd '+repoName+'&& git add --all && git commit -m selva  && git push origin master';
+//    var shellCmd = 'cd .. && cd '+repoName+'&& git status';
+
+    exec(shellCmd ,
+        function (error, stdout, stderr) {
+            console.log('PUSH SUCESS : ',stdout);
+            console.log('ERROR IN PUSH : ',error);
+            console.log('ERROR ERROR : ',stderr);
+            cbk(error,stdout)
+
+        });
 }

@@ -13,7 +13,7 @@ module.exports = {
     api: 'mongodb',
     host: '10.1.10.47',
     port: '12345',
-    schema: 'geoservices',
+    schema: 'geoservice',
     auth: false,
     username: '',
     password: ''
