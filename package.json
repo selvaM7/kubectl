@@ -1,5 +1,5 @@
 {
-  "name": "geoservices",
+  "name": "geoservice",
   "version": "0.1.0",
   "description": "Geo Service Handler",
   "main": "server.js",
