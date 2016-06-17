@@ -188,7 +188,6 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
             .then(function (body) {
 
-                console.log(body);
 
                 self.apiService.processGoogleRGCData((body))
                     .then(function (result) {
