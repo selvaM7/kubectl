@@ -24,19 +24,21 @@ module.exports = APIService;
 
 APIService.prototype.processGoogleRGCData = function (input) {
 
-
     var requestObj = input;
 
     var address = {};
+
     return new Promise(function (resolve, reject) {
 
         var addressComponentsList = 0;
+
         if (requestObj.results != null) {
             var addressComponentsList = requestObj.results[0] ? requestObj.results[0].address_components : 0;
         }
         address.status = true;
+
         for (var i = 0; i < addressComponentsList.length; i++) {
-            //		console.log(addressComponentsList[i]);
+
             switch (addressComponentsList[i].types[0]) {
 
                 case "street_number":
@@ -72,6 +74,7 @@ APIService.prototype.processGoogleRGCData = function (input) {
                     break;
             }
         }
+
         resolve(address) ;
     })
 };
