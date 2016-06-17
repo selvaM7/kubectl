@@ -74,7 +74,7 @@ APIService.prototype.processGoogleRGCData = function (input) {
                     break;
             }
         }
-
+        console.log(address, "addressObject");
         resolve(address) ;
     })
 };
