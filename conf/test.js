@@ -3,7 +3,7 @@ module.exports = {
 
     api: {
         host: '0.0.0.0',
-        port: '12000',
+        port: '8642',
         routes: {
             cors: true
         }
@@ -11,7 +11,7 @@ module.exports = {
 
     database: {
         api: 'mongodb',
-        host: '0.0.0.0',
+        host: '10.0.0.176',
         port: '12345',
         schema: 'geoservice',
         auth: false,
