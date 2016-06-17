@@ -3,7 +3,7 @@ module.exports = {
 
   api: {
     host: '0.0.0.0',
-    port: '8552',
+    port: '8642',
     routes: {
       cors: true
     }
