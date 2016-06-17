@@ -3,7 +3,7 @@ module.exports = {
 
   api: {
     host: '0.0.0.0',
-    port: '8642',
+    port: '8552',
     routes: {
       cors: true
     }
@@ -32,5 +32,15 @@ module.exports = {
       level: 'warn',
       colorize: true
     }
+  },
+  service : {
+    Url:"geocoder"
+    //Url:"amps",
+    //Url:"maps",
+    // googleRGSUrl :
+    //          "http://geocoder.tmatics.com/location/reverse?"
+              //"http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
+              //"http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
+              //"http://geocoder.tmatics.com/location/reverse?latitude="+latitude+"&longitude="+longitude;
   }
 };

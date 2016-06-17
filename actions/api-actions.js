@@ -151,12 +151,33 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
     var latlng = latitude + "," + longitude;
 
+    var googleRGSUrl;
 
-    var googleRGSUrl =
+    if(self.conf.service.Url == "geocoder")
+    {
+         //googleRGSUrl=self.conf.service.googleRGSUrl+"latitude=" + latitude + "&longitude=" + longitude;
+        googleRGSUrl="http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude;
+    }
+
+    if(self.conf.service.Url == "amps")
+    {
+        //googleRGSUrl=self.conf.service.googleRGSUrl+"latlng=" + latlng + "&sensor=" + false;
+        googleRGSUrl= "http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
+
+    }
+    if(self.conf.service.Url == "maps")
+    {
+        //googleRGSUrl=self.conf.service.googleRGSUrl+"latlng=" + latlng + "&sensor=" + false +"&max_tries=" + 3;
+        googleRGSUrl="http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
+    }
+
+
+
+  /*  var googleRGSUrl =
                     "http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude;
                     //"http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
-                    //"http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
-                    //"http://geocoder.tmatics.com/location/reverse?latitude="+latitude+"&longitude="+longitude;
+                    "http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
+                    "http://geocoder.tmatics.com/location/reverse?latitude="+latitude+"&longitude="+longitude;*/
 
 
     console.log("**********************geo code url**************************")
