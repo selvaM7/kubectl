@@ -51,11 +51,11 @@ ApiRoutes.prototype.init = function () {
                 })
                 .error(function(e){
                     console.log("ERROR HANDLER " + e);
-                    reply(e.message)
+                    reply(e)
                 })
                 .catch(function(e){
                     console.log("CATCH in " + e);
-                    reply(e.message)
+                    reply(e)
                 })
 
         }

@@ -4,7 +4,7 @@
 var ApiService = require('../services/api-service.js');
 var Promise = require('bluebird');
 var async = require('async');
-var request = require('request');
+var requestp = require('request-promise');
 
 /************************************************************************
  * Class Declaration
@@ -17,7 +17,6 @@ var APIAction = function (app) {
     this.apiService = Promise.promisifyAll(this.apiServiceInstance);
     this.async = Promise.promisifyAll(async);
 };
-
 module.exports = APIAction;
 
 APIAction.prototype.getAddress = function (reqObj) {
@@ -31,7 +30,6 @@ APIAction.prototype.getAddress = function (reqObj) {
         }
     };
 
-
     var input;
     if (reqObj && reqObj.query) {
         input = reqObj.query
@@ -40,21 +38,22 @@ APIAction.prototype.getAddress = function (reqObj) {
     }
 
     return new Promise(function (resolve, reject) {
+
         if (input) {
             if (input.serviceName && input.serviceName == 'google') {
+
                 self.getAddressUsingGoogle(input)
+
                     .then(function (addressUsingGoogle) {
                         if (addressUsingGoogle && addressUsingGoogle != null) {
-                            console.log("enter resolve Data");
                             response.address['data'] = addressUsingGoogle
                             resolve(response)
                         } else {
-                            console.log("enter resolve NULL");
-
                             resolve(response)
                         }
-                    }).catch(function (e) {
-                        console.log("enter error");
+                    })
+
+                    .catch(function (e) {
                         response.address['err'] = e;
                         reject(response)
                     })
@@ -99,7 +98,8 @@ APIAction.prototype.getAddress = function (reqObj) {
                         reject(response)
                     })
 
-            } else {
+            }
+            else {
                 self.getAddressUsingGoogle(input)
                     .then(function (addressUsingGoogle) {
                         if (addressUsingGoogle && addressUsingGoogle != null) {
@@ -119,7 +119,8 @@ APIAction.prototype.getAddress = function (reqObj) {
             }
 
 
-        } else {
+        }
+        else {
             response = {
                 address: {
                     status: "ERROR",
@@ -142,6 +143,7 @@ APIAction.prototype.getAddress = function (reqObj) {
 
 
 APIAction.prototype.getAddressUsingGoogle = function (input) {
+
     var self = this;
     var response = {};
     var latitude = input.latitude ? input.latitude : 0
@@ -149,59 +151,42 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
     var latlng = latitude + "," + longitude;
 
-    var googleRGSUrl = "http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude
-    //var googleRGSUrl = "http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
-//	var googleRGSUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
-//        var googleRGSUrl = "http://geocoder.tmatics.com/location/reverse?latitude="+latitude+"&longitude="+longitude;
+
+    var googleRGSUrl =
+                    "http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude;
+                    //"http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
+                    //"http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
+                    //"http://geocoder.tmatics.com/location/reverse?latitude="+latitude+"&longitude="+longitude;
+
 
     console.log("**********************geo code url**************************")
     console.log(googleRGSUrl)
     console.log("************************************************************")
 
     return new Promise(function (resolve, reject) {
-        request({url: googleRGSUrl, json: true}, function (err, res, body) {
-            if (err) {
-                return reject(err);
-            } else if (res.statusCode !== 200) {
-                err = new Error("Unexpected status code: " + res.statusCode);
-                err.res = res;
-                return reject(err);
-            }
 
-            return self.apiService.processGoogleRGCData((body))
-                .then(function (result) {
-                    resolve(result)
-                })
-            //console.log("body", body);
-            //resolve(body);
-        });
+        requestp({url: googleRGSUrl, json: true})
+
+            .then(function (body) {
+
+                console.log(body);
+
+                self.apiService.processGoogleRGCData((body))
+                    .then(function (result) {
+                        resolve(result)
+                    })
+            })
+            .catch(function(err){
+                reject(err);
+            })
+
+
+                //if (res.statusCode !== 200) {
+                //    err = new Error("Unexpected status code: " + res.statusCode);
+                //    err.res = res;
+                //    return
+                //}
     });
-
-
-    //
-    //req.on('response').then(function(response){
-    //    var data = "";
-    //
-    //    return new Promise(function (resolve, reject) {
-    //
-    //        response.on("error", function (err) {
-    //            reject(err)
-    //        });
-    //
-    //        response.on("data", function (chunk) {
-    //            data += chunk;
-    //        });
-    //        response.on("end", function ( argument ) {
-    //
-    //
-    //            self.apiService.processGoogleRGCData(JSON.parse(data))
-    //                .then(function (result) {
-    //                    resolve(result)
-    //                })
-    //        })
-    //
-    //    })
-    //})
 };
 
 
