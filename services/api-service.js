@@ -44,37 +44,42 @@ APIService.prototype.processGoogleRGCData = function (input) {
                 case "street_number":
                     address.streetNumber = addressComponentsList[i].long_name;
                     break;
+
                 case "route":
                     address.street = addressComponentsList[i].long_name;
                     break;
-                case "neighborhood":
+
+                case "sublocality_level_1":
                     address.area = addressComponentsList[i].long_name;
-                    address.locality = addressComponentsList[i].long_name;
+                    address.areaShortName = addressComponentsList[i].short_name;
                     break;
-                case "sublocality":
-                    address.subLocality = addressComponentsList[i].long_name;
-                    break;
+
                 case "locality":
                     address.city = addressComponentsList[i].long_name;
                     address.cityShortName = addressComponentsList[i].short_name;
                     break;
+
                 case "administrative_area_level_2":
-                    //				rgcAddressDataModelInstance.city = addressComponentsList[i].long_name;
-                    //				rgcAddressDataModelInstance.cityShortName = addressComponentsList[i].short_name;
+                    address.region = addressComponentsList[i].long_name;
+                    address.regionShortName = addressComponentsList[i].short_name;
                     break;
+
                 case "administrative_area_level_1":
                     address.state = addressComponentsList[i].long_name;
-                    address.stateShortName = addressComponentsList[i].long_name;
+                    address.stateShortName = addressComponentsList[i].short_name;
                     break;
+
                 case "country":
                     address.country = addressComponentsList[i].long_name;
+                    address.countryShortName = addressComponentsList[i].short_name;
                     break;
+
                 case "postal_code":
                     address.postalCode = addressComponentsList[i].long_name;
                     break;
             }
         }
-
+        console.log(address, "addressObject");
         resolve(address) ;
     })
 };

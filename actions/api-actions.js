@@ -161,13 +161,11 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
     if(self.conf.service.Url == "amps")
     {
-        //googleRGSUrl=self.conf.service.googleRGSUrl+"latlng=" + latlng + "&sensor=" + false;
         googleRGSUrl= "http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
 
     }
     if(self.conf.service.Url == "maps")
     {
-        //googleRGSUrl=self.conf.service.googleRGSUrl+"latlng=" + latlng + "&sensor=" + false +"&max_tries=" + 3;
         googleRGSUrl="http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
     }
 
@@ -190,7 +188,6 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
             .then(function (body) {
 
-                console.log(body);
 
                 self.apiService.processGoogleRGCData((body))
                     .then(function (result) {
