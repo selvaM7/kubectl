@@ -1,6 +1,6 @@
 {
   "name": "geoservice",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Geo Service Handler",
   "main": "server.js",
   "repository": {
