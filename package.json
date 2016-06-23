@@ -15,22 +15,21 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
-    "bitbucket-rest": "0.0.1",
     "bluebird": "^3.3.4",
-    "console-stamp": "^0.2.0",
-    "file-exists": "^1.0.0",
     "geocoder": "~0.2.2",
     "good": "^6.6.0",
     "good-console": "^5.3.1",
     "hapi": "^9.5.1",
-    "mustache": "^2.2.1",
     "request": "~2.72.0",
     "request-promise": "^3.0.0",
     "tdatadriver": "git+https://tpm:t676@bitbucket.org/tode/tdatadriver.git#master",
     "tlogger": "git+https://tpm:t676@bitbucket.org/tode/tlogger.git",
-    "tswagger-codegen": "git+https://tpm:t676@bitbucket.org/tlib/tswagger-codegen.git",
     "underscore": "^1.8.3",
-    "where": "~0.1.2"
+    "where": "~0.1.2",
+    "service-factory-dev": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-dev.git",
+    "service-factory-test": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-test.git",
+    "service-factory-prod": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-prod.git",
+    "tbuild-client": "git+https://tpm:t676@bitbucket.org/tlib/tbuild-client.git"
   },
   "devDependencies": {}
 }
