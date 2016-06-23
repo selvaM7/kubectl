@@ -26,9 +26,6 @@
     "tlogger": "git+https://tpm:t676@bitbucket.org/tode/tlogger.git",
     "underscore": "^1.8.3",
     "where": "~0.1.2",
-    "service-factory-dev": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-dev.git",
-    "service-factory-test": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-test.git",
-    "service-factory-prod": "git+https://tpm:t676@bitbucket.org/tlib/service-factory-prod.git",
     "tbuild-client": "git+https://tpm:t676@bitbucket.org/tlib/tbuild-client.git"
   },
   "devDependencies": {}
