@@ -1,4 +1,8 @@
 
+
+
+
+
 module.exports = {
 
   api: {
@@ -34,8 +38,8 @@ module.exports = {
     }
   },
   service : {
-    Url:"geocoder"
-    //Url:"amps",
+    //Url:"geocoder"
+   Url:"amps",
     //Url:"maps",
     // googleRGSUrl :
     //          "http://geocoder.tmatics.com/location/reverse?"
