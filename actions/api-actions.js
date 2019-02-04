@@ -19,6 +19,39 @@ var APIAction = function (app) {
 };
 module.exports = APIAction;
 
+
+
+
+//for poc in static address
+
+APIAction.prototype.getStaticAddress = function (reqObj) {
+
+    console.log(new Date(),"Enter to geocoder")
+    var response = {
+        address: {
+            status: false,
+            err: null,
+            data: {
+                "status":true,
+                "streetNumber":"21865",
+                "street":"Northeast Imbrie Drive",
+                "city":"Hillsboro",
+                "cityShortName":"Hillsboro",
+                "region":"Washington County",
+                "regionShortName":"Washington County",
+                "state":"Oregon",
+                "stateShortName":"OR",
+                "country":"United States",
+                "countryShortName":"US",
+                "postalCode":"97124"
+            }
+        }
+
+    };
+    console.log(new Date(),"response",response);
+
+    return Promise.resolve(response)
+};
 APIAction.prototype.getAddress = function (reqObj) {
 
     var self = this;
@@ -161,12 +194,12 @@ APIAction.prototype.getAddressUsingGoogle = function (input) {
 
     if(self.conf.service.Url == "amps")
     {
-        googleRGSUrl= "http://amps.tmatics.com/geoservice/services/google/maps/api/geocode/json?latlng="+latlng+"&sensor=false&max_tries=3";
+        googleRGSUrl="http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude;
 
     }
     if(self.conf.service.Url == "maps")
     {
-        googleRGSUrl="http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=false";
+        googleRGSUrl="http://geocoder.tmatics.com/location/reverse?latitude=" + latitude + "&longitude=" + longitude;
     }
 
 

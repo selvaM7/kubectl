@@ -44,11 +44,12 @@ ApiRoutes.prototype.init = function () {
         path:'/v1/getLocationDetails',
         handler: function (request, reply) {
 
-            self.apiAction.getAddress(request)
+            self.apiAction.getStaticAddress(request)
                 .then(function(result){
-                    console.log("*********ADDRESS RESULT*********",result)
+                    console.log("*********RESPONSE FROM GEOCODER *********",result)
                     reply(result)
                 })
+
                 .error(function(e){
                     console.log("ERROR HANDLER " + e);
                     reply(e)
