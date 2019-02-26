@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Usermanagement-api
 This project contains the api calls for the user and role ebtities.
 ## How to Run this Project
@@ -23,3 +24,7 @@ var config = {
 ## Methods ##
 ### 1) Mange User Profile ###
 To mange users in User Management Module
+=======
+# kubectl
+jx with kube
+>>>>>>> 1b1bfa48f10f31e414bf7c31e78ca47573325fba
