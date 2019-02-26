@@ -1,0 +1,2 @@
+# kubectl
+jx with kube
